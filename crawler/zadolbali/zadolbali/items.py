@@ -8,7 +8,12 @@
 import scrapy
 
 
-class ZadolbaliItem(scrapy.Item):
+class StoryItem(scrapy.Item):
     # define the fields for your item here like:
-    # name = scrapy.Field()
+    id = scrapy.Field()
+    title = scrapy.Field()
+    published = scrapy.Field()
+    tags = scrapy.Field()
+    text = scrapy.Field()
+    likes = scrapy.Field()
     pass
