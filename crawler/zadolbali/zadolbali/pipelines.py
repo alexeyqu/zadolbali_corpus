@@ -1,58 +1,91 @@
 # -*- coding: utf-8 -*-
 
-import os
+import os, logging
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy import create_engine, Table, Column, Integer, String, MetaData, ForeignKey
-from sqlalchemy.orm import Session
-from zadolbali.items import StoryItem
+from sqlalchemy import create_engine, Table, Column, Integer, String, DateTime, MetaData, ForeignKey
+from sqlalchemy.engine.url import URL
+from sqlalchemy.orm import sessionmaker
+from sqlalchemy.pool import NullPool
 from scrapy.exceptions import DropItem
+from scrapy import signals
+from zadolbali.items import StoryItem
 
-Base = declarative_base()
+logger = logging.getLogger(__name__)
 
-class StoryTable(Base):
-	__tablename__ = 'Stories'
-	id = Column(Integer, primary_key=True)
-	story_id = Column(Integer)
-	title = Column(String)
-	# published = Column(String) datatype?
-	# tags = Column(String)
-	# text = Column(String)
-	# likes = Column(Integer)
+DeclarativeBase = declarative_base()
 
-	def __init__(self, story_id, title):
-		self.story_id = story_id
-		self.title = title
+class Story(DeclarativeBase):
+	__tablename__ = 'stories'
+
+	id = Column('id', Integer, primary_key=True)
+	title = Column('title', String)
+	published = Column('published', Integer)
+	tags = Column('tags', String)
+	text = Column('text', String)
+	likes = Column('likes', Integer)
 
 	def __repr__(self):
-		return "<Story %s, %s>" % \
-			   (str(self.id), self.title)
+		return "<Story({0}, {1})>".format(self.id, self.title)
 
 class RedactorPipeline(object):
 	def process_item(self, item, spider):
-		for i, string in enumerate(item['title']):
-			item['title'][i] = string.replace(u'\xa0', u' ').strip()
-		for i, string in enumerate(item['text']):
-			item['text'][i] = string.replace(u'\xa0', u' ').strip()
+		item['id'] = int(item['id']) 
+		item['title'] = item['title'].replace(u'\xa0', u' ').strip()
+		item['published'] = int(item['published']) 
+		item['tags'] = ' '.join(tag.split('/')[2] for tag in item['tags'].split())
+		item['text'] = item['text'].replace(u'\xa0', u' ').strip()
+		item['likes'] = int(item['likes'])
 		return item
 
-Base = declarative_base()
+class SqlitePipeline(object):
+	def __init__(self, settings):
+		self.database = settings.get('DATABASE')
+		self.sessions = {}
 
-class SQLitePipeline(object):
-	def __init__(self):
-		basename = 'stories.sqlite'
-		self.engine = create_engine("sqlite:///%s" % basename, echo=False)
-		if not os.path.exists(basename):
-			Base.metadata.create_all(self.engine)
+	@classmethod
+	def from_crawler(cls, crawler):
+		pipeline = cls(crawler.settings)
+		crawler.signals.connect(pipeline.spider_opened, signals.spider_opened)
+		crawler.signals.connect(pipeline.spider_closed, signals.spider_closed)
+		return pipeline
+
+	def create_engine(self):
+		engine = create_engine(URL(**self.database), poolclass=NullPool)
+		return engine
+
+	def create_tables(self, engine):
+		DeclarativeBase.metadata.create_all(engine, checkfirst=True)
+
+	def create_session(self, engine):
+		session = sessionmaker(bind=engine)()
+		return session
+
+	def spider_opened(self, spider):
+		engine = self.create_engine()
+		self.create_tables(engine)
+		session = self.create_session(engine)
+		self.sessions[spider] = session
+
+	def spider_closed(self, spider):
+		session = self.sessions.pop(spider)
+		session.close()
 
 	def process_item(self, item, spider):
-		if isinstance(item, StoryItem):
-			dt = StoryTable(item['id'],item['title'])
-			self.session.add(dt)
+		session = self.sessions[spider]
+		story = Story(**item)
+		link_exists = session.query(Story).filter_by(id=item['id']).first() is not None
+
+		if link_exists:
+			logger.info('Item {} is in db'.format(story))
+			return item
+
+		try:
+			session.add(story)
+			session.commit()
+			logger.info('Item {} stored in db'.format(story))
+		except:
+			logger.info('Failed to add {} to db'.format(story))
+			session.rollback()
+			raise
+
 		return item
-
-	def close_spider(self, spider):
-		self.session.commit()
-		self.session.close()
-
-	def open_spider(self, spider):
-		self.session = Session(bind=self.engine)

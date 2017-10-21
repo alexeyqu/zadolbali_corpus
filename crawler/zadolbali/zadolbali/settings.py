@@ -10,20 +10,27 @@
 #     http://scrapy.readthedocs.org/en/latest/topics/spider-middleware.html
 
 BOT_NAME = 'zadolbali'
-BOT_VERSION = '1.0'
 
 SPIDER_MODULES = ['zadolbali.spiders']
 NEWSPIDER_MODULE = 'zadolbali.spiders'
 
+DATABASE = {
+    'drivername': 'sqlite',
+    # 'host': 'localhost',
+    # 'port': '5432',
+    # 'username': 'YOUR_USERNAME',
+    # 'password': 'YOUR_PASSWORD',
+    'database': 'stories.sqlite'
+}
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
-USER_AGENT = '%s/%s' % (BOT_NAME, BOT_VERSION)
+USER_AGENT = '%s' % (BOT_NAME)
 
 # Obey robots.txt rules
 ROBOTSTXT_OBEY = True
 
 # Configure maximum concurrent requests performed by Scrapy (default: 16)
-CONCURRENT_REQUESTS = 1
+CONCURRENT_REQUESTS = 32
 
 # Configure a delay for requests for the same website (default: 0)
 # See http://scrapy.readthedocs.org/en/latest/topics/settings.html#download-delay
@@ -67,7 +74,7 @@ CONCURRENT_REQUESTS = 1
 # See http://scrapy.readthedocs.org/en/latest/topics/item-pipeline.html
 ITEM_PIPELINES = {
    'zadolbali.pipelines.RedactorPipeline': 300,
-   'zadolbali.pipelines.SQLitePipeline': 400,
+   'zadolbali.pipelines.SqlitePipeline': 400,
 }
 
 # Enable and configure the AutoThrottle extension (disabled by default)
@@ -90,3 +97,6 @@ AUTOTHROTTLE_MAX_DELAY = 60
 #HTTPCACHE_DIR = 'httpcache'
 #HTTPCACHE_IGNORE_HTTP_CODES = []
 #HTTPCACHE_STORAGE = 'scrapy.extensions.httpcache.FilesystemCacheStorage'
+
+LOG_FILE = 'crawling.log'
+
