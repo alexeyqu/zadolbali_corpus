@@ -9,4 +9,5 @@ class StoryItem(Item):
     tags = Field()
     text = Field()
     likes = Field()
+    url = Field()
     pass

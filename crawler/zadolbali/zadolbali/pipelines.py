@@ -23,6 +23,7 @@ class Story(DeclarativeBase):
 	tags = Column('tags', String)
 	text = Column('text', String)
 	likes = Column('likes', Integer)
+	url = Column('url', String)
 
 	def __repr__(self):
 		return "<Story({0}, {1})>".format(self.id, self.title)
@@ -35,6 +36,7 @@ class RedactorPipeline(object):
 		item['tags'] = ' '.join(tag.split('/')[-1] for tag in item['tags'].split())
 		item['text'] = item['text'].replace(u'\xa0', u' ').strip()
 		item['likes'] = int(item['likes'])
+		item['url'] = item['url'].replace(u'\xa0', u' ').strip()
 		return item
 
 class SqlitePipeline(object):
