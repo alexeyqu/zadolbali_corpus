@@ -1,0 +1,163 @@
+\documentclass[14pt]{beamer}
+\usepackage[T2A]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[english,russian]{babel}
+\usepackage{amssymb,amsfonts,amsmath,mathtext}
+\usepackage{cite,enumerate,float,indentfirst}
+\usepackage{booktabs}
+\usepackage{listings}
+
+\graphicspath{{images/}}
+
+\usetheme{Pittsburgh}
+\usecolortheme{whale}
+
+\setbeamercolor{footline}{fg=blue}
+\setbeamertemplate{footline}{
+	\leavevmode%
+	\hbox{%
+		\begin{beamercolorbox}[wd=.333333\paperwidth,ht=2.25ex,dp=1ex,center]{}%
+			Кривчанский Н., Куликов А., ABBYY
+		\end{beamercolorbox}%
+		\begin{beamercolorbox}[wd=.333333\paperwidth,ht=2.25ex,dp=1ex,center]{}%
+			Москва, 2017
+		\end{beamercolorbox}%
+		\begin{beamercolorbox}[wd=.333333\paperwidth,ht=2.25ex,dp=1ex,right]{}%
+			Стр. \insertframenumber{} из \inserttotalframenumber \hspace*{2ex}
+	\end{beamercolorbox}}%
+	\vskip0pt%
+}
+
+\newcommand{\itemi}{\item[\checkmark]}
+
+\title{Zadolba.li}
+\subtitle{\footnotesize{Корпус текстов}}
+\author{\small{%
+		~Кривчанский Н., Куликов А.}\\%
+	\vspace{30pt}%
+	ABBYY%
+	\vspace{20pt}%
+}
+\date{\small{Москва, 2017}}
+
+\begin{document}
+	
+	\maketitle
+
+\begin{frame}[fragile]
+	
+	\frametitle{Вид корпуса}
+	
+	\begin{itemize}
+		\item Русскоязычный корпус;
+		\item Широкий спектр тематик;
+		\item Легко выделить несколько стилей;
+		\item Имеется премодерация и теги историй.
+	\end{itemize}
+
+\end{frame}
+
+\begin{frame}[fragile]
+	
+	\frametitle{Собранный корпус}
+	
+	\begin{itemize}
+		\item 23487 истории;
+		\item С 10.09.2009 по 23.10.2017;
+		\item Id, название, дата публикации, теги, текст, лайки, url;
+		\item SQLite размер 90,8 MB.
+	\end{itemize}
+	
+\end{frame}
+
+\begin{frame}[fragile]
+	
+	\frametitle{Простые статистики}
+	
+	\begin{itemize}
+		\item 23487 истории;
+		\item 4041730 слов (nltk Regexp($\backslash$w+) tokenizer);
+		\item Размер истории $L \in [10; 1399]$ слов, $\bar L = 270$;
+	\end{itemize}
+	
+\end{frame}
+
+\begin{frame}[fragile]
+	
+	\frametitle{Распределение тегов}
+	
+	\begin{center}
+		Самые частые теги:
+		
+		\begin{tabular}{c|c}
+			women & 2793 \\
+			transport & 2055 \\
+			men & 1566 \\
+			friends & 1544 \\
+			internet & 1518 \\
+			healthcare & 1516 \\
+			education & 1461 \\
+			leisure & 1440 \\
+			kids & 1415 \\
+			relatives & 1303 \\
+		\end{tabular}
+	\end{center}
+	
+\end{frame}
+
+\begin{frame}[fragile]
+	
+	\frametitle{Распределение лайков}
+	
+	\begin{figure}
+		\includegraphics[height=110]{images/likes.png}
+	\end{figure}
+	
+\end{frame}
+
+
+\begin{frame}[fragile]
+	
+	\frametitle{Самые лайкаемые теги}
+	
+	\begin{center}
+		Самые лайкаемые теги:
+		
+		\begin{tabular}{c|c}
+			cops & 3927.01 \\
+			kids & 3668.98 \\
+			religion & 3404.57 \\
+			men & 3380.20 \\
+			relatives & 3329.33 \\
+			household & 3322.93 \\
+			neighbors & 3223.52 \\
+			state & 3217.17 \\
+			golden-age & 3111.95 \\
+			animals & 3088.71 \\
+		\end{tabular}
+	\end{center}
+	
+\end{frame}
+
+\begin{frame}[fragile]
+	
+	\frametitle{Самые лайкаемые теги}
+	
+	\begin{figure}
+		\includegraphics[height=150]{images/tags_by_likes.png}
+	\end{figure}
+
+	Цвет -- среднее кол-во лайков у тега.
+	
+	Высота -- кол-во историй у тега.
+	
+\end{frame}
+
+
+\begin{frame}
+	\center{\huge
+		To Be Continued..
+	}
+\end{frame}
+
+\end{document} 
