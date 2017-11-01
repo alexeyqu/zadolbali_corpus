@@ -36,6 +36,8 @@ class StoriesSpider(CrawlSpider):
         loader.add_xpath('tags', '//div[@class="story"]/div[@class="meta"]/div[@class="tags"]/ul/li/a/@href')
         loader.add_xpath('text', 'string(//div[@class="story"]/div[@class="text"])')
         loader.add_xpath('likes', 'string(//div[@class="story"]/div[@class="actions"]//div[@class="rating"])')
+        loader.add_xpath('hrefs', '//div[@class="story"]/div[@class="text"]//a/@href')
+        loader.add_value('hrefs', '')
         loader.add_value('url', str(response.url))
 
         return loader.load_item()
