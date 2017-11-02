@@ -62,8 +62,8 @@
 	\frametitle{Собранный корпус}
 	
 	\begin{itemize}
-		\item 23487 истории;
-		\item С 10.09.2009 по 23.10.2017;
+		\item 23558 истории;
+		\item С 10.09.2009 по 01.11.2017;
 		\item Id, название, дата публикации, теги, текст, лайки, url, ссылки на другие истории;
 		\item SQLite размер 91,2 MB.
 	\end{itemize}
@@ -75,12 +75,22 @@
 	\frametitle{Простые статистики}
 	
 	\begin{itemize}
-		\item 23487 истории;
+		\item 23558 истории;
 		\item 4041730 слов (nltk Regexp($\backslash$w+) tokenizer);
-		\item Размер истории $L \in [10; 1399]$ слов, $\bar L = 270$ слов;
+		\item Размер истории $L \in [10; 1399]$ слов, $\bar L \approx 270$ слов;
 		\item 464750 предложений (nltk PunktSentenceTokenizer with russian model);
 		\item Размер истории $S \in [1; 173]$ предложений, $\bar S = 20$ предложений.
 	\end{itemize}
+	
+\end{frame}
+
+\begin{frame}[fragile]
+	
+	\frametitle{Распределение лайков}
+	
+	\begin{figure}
+		\includegraphics[height=110]{images/likes.png}
+	\end{figure}
 	
 \end{frame}
 
@@ -109,14 +119,36 @@
 
 \begin{frame}[fragile]
 	
-	\frametitle{Распределение лайков}
+	\frametitle{Корреляция тегов}
 	
 	\begin{figure}
-		\includegraphics[height=110]{images/likes.png}
+		\includegraphics[height=200]{images/tags_correlation.png}
 	\end{figure}
 	
 \end{frame}
 
+\begin{frame}[fragile]
+	
+	\frametitle{Самые частые пары тегов}
+	
+	\begin{center}
+		Самые частые пары тегов:
+		
+		\begin{tabular}{c|c|c}
+			men & women & 805 \\
+			friends & relatives & 360 \\
+			beauty & women & 284 \\
+			kids & women & 284 \\
+			colleagues & friends & 206 \\
+			clothing & women & 166 \\
+			colleagues & relatives & 157 \\
+			household & men & 156 \\
+			transport & women & 155 \\
+			friends & women & 149 \\
+		\end{tabular}
+	\end{center}
+	
+\end{frame}
 
 \begin{frame}[fragile]
 	
