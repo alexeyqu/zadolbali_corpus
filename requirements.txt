@@ -1,0 +1,10 @@
+elasticsearch==5.4.0
+jsonschema==2.6.0
+matplotlib==2.1.0
+nltk==3.2.5
+numpy==1.13.3
+pandas==0.20.3
+requests==2.18.4
+scipy==0.19.1
+Scrapy==1.4.0
+SQLAlchemy==1.1.14
