@@ -15,9 +15,9 @@ class Story(object):
 class PosTagEntry(object):
     pass
 
-def get_tagged_story(story_id, session):
-    story = session.query(Story).get(story_id)
-    pos_tags = session.query(PosTagEntry).filter(PosTagEntry.story_id == story_id).all()
+def get_tagged_story(story_id, session, Story_class, PosTagEntry_class):
+    story = session.query(Story_class).get(story_id)
+    pos_tags = session.query(PosTagEntry_class).filter(PosTagEntry_class.story_id == story_id).all()
     tagged_text = ''
 
     pos_tags.sort(key=lambda x: x.start)
@@ -49,4 +49,4 @@ if __name__ == "__main__":
     Session = sessionmaker(bind=engine)
     session = Session()
 	
-    print(get_tagged_story(2, session))
+    print(get_tagged_story(2, session, Story, PosTagEntry))
