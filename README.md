@@ -1,5 +1,5 @@
 # zadolbali_corpus
-Collecting and analyzing stories from (zadolba.li)[http://zadolba.li/].
+Collecting and analyzing stories from [zadolba.li](http://zadolba.li/).
 
 ## Usage
 
